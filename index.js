@@ -3,7 +3,6 @@ const app = express()
 require('dotenv').config()
 const mongoose = require('mongoose')
 const userRoute = require('./router/user')
-
 app.use('/api/users',userRoute)
 /*mongoose.connect(process.env.DATABASE)
 .then(() => console.log("data base connected"))
