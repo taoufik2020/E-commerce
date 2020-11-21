@@ -2,12 +2,29 @@ const express = require('express')
 const app = express()
 require('dotenv').config()
 const mongoose = require('mongoose')
-const userRoute = require('./router/user')
+const expressValidator = require('express-validator')
+//var bodyParser = require('body-parser')
+//import routes
+const userRoute = require('./router/users')
+app.use(express.json())
+app.use(expressValidator())
+//routes
 app.use('/api/users',userRoute)
-/*mongoose.connect(process.env.DATABASE)
+
+//middlware 
+
+
+//bodyParser.json()
+
+//connection with database
+mongoose.connect(process.env.DATABASE , {
+    useNewUrlParser: true,
+    useCreateIndex : true,
+    useUnifiedTopology: true 
+})
 .then(() => console.log("data base connected"))
 .catch(() => console.log('database not connected'))
-*/
+
 
 
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-
-
-const userSchema = new mongoose.Schema({
+const {v1:uui} = require('uuid')
+const crypt = require('crypto')
+const userSchema =  mongoose.Schema({
     name:{
         type: String,
         trim: true,
@@ -18,9 +18,9 @@ const userSchema = new mongoose.Schema({
     salt:{
         type: String
     },
-    password:{
+    hashed_password:{
         type: String,
-        required: true
+       required: true
     },
     about:{
         type: String,
@@ -35,3 +35,33 @@ const userSchema = new mongoose.Schema({
         default: []
     }
 }, {timestamps: true})
+
+userSchema.virtual('password').set(
+    function(pass){
+        this._password
+        this.salt = uui()
+        this.hashed_password = this.crypto(pass)
+
+    }
+).get(
+    function(){
+        return this._password
+    }
+)
+
+userSchema.methods = {
+
+    crypto: function(password){
+
+        if(!password) return '';
+        try {
+            return crypt.createHmac('sha256', this.salt)
+            .update(password)
+            .digest('hex');
+        } catch (error) {
+            return error;
+        }
+    }
+}
+
+module.exports = mongoose.model('User',userSchema)
