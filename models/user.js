@@ -38,7 +38,7 @@ const userSchema =  mongoose.Schema({
 
 userSchema.virtual('password').set(
     function(pass){
-        this._password
+        this._password = pass
         this.salt = uui()
         this.hashed_password = this.crypto(pass)
 
@@ -51,8 +51,15 @@ userSchema.virtual('password').set(
 
 userSchema.methods = {
 
-    crypto: function(password){
+    authenticatedUser: function(password){
+         //return false
+        return this.crypto(password) === this.hashed_password 
+            
+        
+    },
 
+    crypto: function(password){
+       
         if(!password) return '';
         try {
             return crypt.createHmac('sha256', this.salt)

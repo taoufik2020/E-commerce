@@ -6,7 +6,7 @@ exports.userSignValidator = (req,res,next) => {
     req.check('password').notEmpty().isLength({min:4,max:10})
     .withMessage('password between 4 and 6 ')
 
-   const errors = req.validationErrors()
+    const errors = req.validationErrors()
   
    if(errors) {
        return res.status(400).send(errors)

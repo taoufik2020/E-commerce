@@ -1,11 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const { getUser, singin } = require('../Controllers/userController')
-const { userSignValidator} = require('../middlware/userValidator')
-const User = require('../models/user')
 
-router.get('/',getUser);
-router.post('/sing',userSignValidator,singin)
+const express = require('express')
+const { getUser} = require('../Controllers/userController')
+const { userById} = require('../middlware/user')
+const {requireJWT,isAuth} = require('../middlware/auth')
+const router = express.Router()
+
+router.get('/profile/:userId',requireJWT,isAuth,getUser)
+
+router.param('userId',userById)
 
 
 module.exports = router

@@ -1,15 +1,19 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
+const cookie = require('cookie-parser')
 const mongoose = require('mongoose')
 const expressValidator = require('express-validator')
 //var bodyParser = require('body-parser')
 //import routes
-const userRoute = require('./router/users')
+const authRoute = require('./router/auth')
+const userRouter = require('./router/users')
 app.use(express.json())
+app.use(cookie())
 app.use(expressValidator())
 //routes
-app.use('/api/users',userRoute)
+app.use('/api',authRoute)
+app.use('/user',userRouter)
 
 //middlware 
 
